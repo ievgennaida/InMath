@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/InMath/obj
+/packages
+/InMath.Text/obj/Debug
+/InMath.Text/bin/Debug
