@@ -93,18 +93,17 @@ namespace InMath.LexicalAnalysis
             {
                 return charColumn;
             }
-            else if (toCheck == '(')
+            else
             {
                 return anyOtherSymbol;
             }
-
-            return 0;
         }
 
         public LexicalStackMachine()
         {
-            // States are harcoded as an array for a performance. This way is much faster than anything else.
-            states = new short[17][];
+            // States are harcoded as an array for a performance. 
+            // This way is much faster than anything else (read files and etc).
+            states = new short[18][];
 
             numberColumn = 0;
             charColumn = 1;
@@ -122,53 +121,89 @@ namespace InMath.LexicalAnalysis
             anyOtherSymbol = 13;
             squareBracketLeftColumn = 14;
             squareBracketRightColumn = 15;
-            typesColumn = 14;
-       
-            // Columns              number, char, (	)	*	/	-	+	.	,	_	^	space	[	]	any other	generated types.
-            //start
-            states[0] = new short[] { 1, 35, 3, 4, 5, 7, 6, 8, 0, 12, 0, 10, 14, 0, 0, 0, 21 };
-            // integer 
-            states[1] = new short[] { 1, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 8 };
-            // real
-            states[2] = new short[] { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9 };
-            // (
-            states[3] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 7, };
-            // )
-            states[4] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 11 };
-            // *
-            states[5] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 12 };
-            // -
-            states[6] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 13 };
+            typesColumn = 17;
 
-            // /
-            states[7] = new short[] { 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19 };
+            // Columns: number(0), char(1), (2	)3	*4	/5	-6	+7	.8	,9	_10	^11	space12	[13	]14	!15  any other16	generated types.17
+            // start                  0  1  2  3  4  5  6  7  8  9   10   11   12  13 14 15 16 17 
+            states[0] = new short[] { 1, 9, 3, 4, 5, 7, 6, 8, 0, 12, 0, 101, 14, 100, 100, 100, 0, 21 };
+            // integer                0  1  2  3  4  5  6  7  8   9  10 11 12 13 14 15 16 17 
+            states[1] = new short[] { 1, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 8 };
+            // real                   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[2] = new short[] { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9 };
+            // (                      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[3] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 7, };
+            // )                      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[4] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 11 };
+            // *                      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[5] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 12 };
+            // -                      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[6] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 13 };
 
-            // +
-            states[8] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 14 };
+            // /                      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[7] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19 };
 
-            // argument
-            states[9] = new short[] { 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1 };
+            // +                      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[8] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14 };
 
-            // ^
-            states[10] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 15 };
+            // argument               0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[9] = new short[] { 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1 };
 
-            // .
-            states[11] = new short[] { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 23 };
+            // ^                       0  1  2  3  4  5  6  7  8  9  10 11 12  13 14 15 16 17 
+            states[10] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 15 };
 
-            // ,
-            states[12] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 17 };
+            // .                       0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[11] = new short[] { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 23 };
 
-            //  _
-            states[13] = new short[] { 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1 };
+            // ,                       0  1  2  3  4  5  6  7  8  9  10 11 12  13 14 15 16 17 
+            states[12] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 17 };
 
-            // Space
-            states[14] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 25 };
+            //  _                      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 
+            states[13] = new short[] { 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 1 };
+
+            // Space                   0  1  2  3  4  5  6  7  8  9  10 11 12  13 14 15 16 17 
+            states[14] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 25 };
 
             // [
-            states[13] = new short[] { 9, 9, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1 };
+            states[15] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
 
             // ]
-            states[14] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 25 };
+            states[16] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25 };
+
+            // !
+            states[17] = new short[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25 };
+
+            ValidateTable();
+        }
+
+        private void ValidateTable()
+        {
+            // Check that table properly initialized.
+            if (states == null)
+            {
+                throw new InvalidOperationException("States table cannot be null");
+            }
+            else
+            {
+                var index = 0;
+                int? lastLenght = null;
+                foreach (var state in states)
+                {
+                    if (state == null)
+                    {
+                        throw new InvalidOperationException("State table row " + index + "  cannot be null");
+                    }
+                    else if (!lastLenght.HasValue)
+                    {
+                        lastLenght = state.Length;
+                    }
+                    else if (state.Length != lastLenght)
+                    {
+                        throw new InvalidOperationException("State table row " + index + "  cannot be null");
+                    }
+
+                    index++;
+                }
+            }
         }
     }
 }

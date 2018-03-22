@@ -48,7 +48,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LexicalAnalysis\UnitTest1.cs" />
+    <Compile Include="LexicalAnalysis\CheckInvalidOperations.cs" />
+    <Compile Include="LexicalAnalysis\CheckArguments.cs" />
+    <Compile Include="LexicalAnalysis\NumbersTests.cs" />
+    <Compile Include="LexicalAnalysis\LexicalTestsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

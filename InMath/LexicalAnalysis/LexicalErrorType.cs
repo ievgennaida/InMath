@@ -6,7 +6,9 @@ namespace InMath.LexicalAnalysis
 {
     public enum LexicalErrorType
     {
-        UnexpectedCharacter,
-        ScientificNotationNotFinished
+        UnexpectedCharacter = 100,
+        CannotBeStartedFromUnderscope = 101,
+        CannotBeEndedWithUnderscope = 102
+       // ScientificNotationNotFinished
     }
 }

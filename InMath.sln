@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InMath", "InMath\InMath.csproj", "{6891B3DB-B597-48A5-BE50-3C9E5A9F3027}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InMath", "InMath\InMath.csproj", "{6891B3DB-B597-48A5-BE50-3C9E5A9F3027}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InMath.Text", "InMath.Text\InMath.Text.csproj", "{3ED798EC-0680-4613-8099-6A466BEE19AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InMath.Tests", "InMath.Text\InMath.Tests.csproj", "{3ED798EC-0680-4613-8099-6A466BEE19AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{7BEA07D9-0951-4518-A16F-7D4E7A47864B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InMathWPFClient", "InMathTestClient\InMathWPFClient.csproj", "{AE5CE05A-6464-4962-A814-894F416FD2F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +25,16 @@ Global
 		{3ED798EC-0680-4613-8099-6A466BEE19AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ED798EC-0680-4613-8099-6A466BEE19AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ED798EC-0680-4613-8099-6A466BEE19AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE5CE05A-6464-4962-A814-894F416FD2F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE5CE05A-6464-4962-A814-894F416FD2F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE5CE05A-6464-4962-A814-894F416FD2F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE5CE05A-6464-4962-A814-894F416FD2F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AE5CE05A-6464-4962-A814-894F416FD2F5} = {7BEA07D9-0951-4518-A16F-7D4E7A47864B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3ED79A20-E836-4D8E-A11D-AA33F10B0ABF}

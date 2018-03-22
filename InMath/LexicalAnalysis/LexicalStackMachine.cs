@@ -20,7 +20,7 @@ namespace InMath.LexicalAnalysis
         public bool TryGetState(int column, int row, out int result)
         {
             result = -1;
-            if (states != null && states.Length > column && states[column] != null && states[column].Length > row)
+            if (states.Length > column && states[column].Length > row)
             {
                 result = states[column][row];
                 return true;
@@ -36,7 +36,15 @@ namespace InMath.LexicalAnalysis
         /// <returns>The results.</returns>
         public LexicalResults Parse(string inputString)
         {
+            this.ValidateTable();
             var results = new LexicalResults();
+            results.Input = inputString;
+
+            if (string.IsNullOrEmpty(inputString))
+            {
+                return results;
+            }
+
             int lexemStart = 0;
             var currentState = 0;
             //var errorFormat = "{2} '{0}' Позиція: {1}";
@@ -44,21 +52,32 @@ namespace InMath.LexicalAnalysis
             {
                 var input = inputString[i];
                 var rowIndex = GetColumnIndex(input);
+
+                // Error state is replaced.
+                if (currentState >= 100)
+                {
+                    currentState = 0;
+                }
+
+                var lastState = currentState;
                 if (!TryGetState(currentState, rowIndex, out currentState))
                 {
                     throw new LexicalAnalysisException(string.Format("Виникла помилка на {0}x{1}", rowIndex, currentState), i);
                 }
                 else
                 {
-                    var lastState = currentState;
                     var isLastSymbol = i == inputString.Length - 1;
-                    var isTerminalState = currentState == 0;
+                    var isErrorState = currentState >= 100;
+                    var isTerminalState = currentState == 0 || isErrorState;
                     // terminal state.
                     if (isTerminalState || isLastSymbol)
                     {
-                        int result;
-                        if (TryGetState(lastState, typesColumn, out result))
+                        int result = 1;
+                        if (isErrorState || TryGetState(lastState, typesColumn, out result))
                         {
+
+                            isErrorState = result == 21 || result == 23;
+                            //result = currentState;
                             var lenght = (!isTerminalState && isLastSymbol) ? inputString.Length - lexemStart : i - lexemStart;
                             var position= new LexicalPosition()
                             {
@@ -75,33 +94,26 @@ namespace InMath.LexicalAnalysis
                             var value = string.Empty;
                             if (inputString.Length >= lexemStart + lenght)
                             {
-                                value = inputString.Substring(lexemStart, lenght);
+                                if (lexemStart == i && lenght == 1)
+                                {
+                                    value = input.ToString();
+                                }
+                                else
+                                {
+                                    value = inputString.Substring(lexemStart, lenght);
+                                }
                             }
 
                             // errors have number more than 100
-                            if (result >= 100)
+                            if (isErrorState)
                             {
-                                //    if (errors.ContainsKey((LexemType)result))
-                                //    {
-                                //        var type = (LexemType)result;
-                                //        String name = String.Format(errorFormat,
-                                //                                    inputString.Substring(lexemStart,lenght),
-                                //                                    lexemStart + 0, errors[type], Environment.NewLine);
-                                //        tmpErrors.Add(new Lexem(name, type, new LexemPosition(inputString.Length, i)));
-                                //    }
-                                //    else
-                                //    {
-                                //        String name = inputString.Substring(lexemStart, inputString.Length - lexemStart);
-                                //        tokens.Add(new Lexem(name, (LexemType)result, new LexemPosition(inputString.Length, i)));
-                                //    }
-
-
+                                results.HasErrors = true;
                                 if (lenght == 0)
                                 {
                                     lenght = 1;
                                 }
 
-                                results.Errors.Add(new LexicalError()
+                                results.Tokens.Add(new LexicalError()
                                 {
                                     Type = (LexicalTokenType)result,
                                     Value = value,
@@ -109,6 +121,7 @@ namespace InMath.LexicalAnalysis
                                 });
 
                                 lexemStart = i + 1;
+
                             }
                             else
                             {
@@ -122,7 +135,11 @@ namespace InMath.LexicalAnalysis
 
                             if (!isLastSymbol || isTerminalState)
                             {
-                                i--;
+                                if (!isErrorState)
+                                {
+                                    i--;
+                                }
+
                                 continue;
                             }
                         }
@@ -134,23 +151,6 @@ namespace InMath.LexicalAnalysis
                 }
             }
 
-            //for (int i = 0; i < tokens.Count; i++)
-            //{
-            //    Lexem lexem = tokens[i];
-            //    if (lexem.Type == LexemType.Space)
-            //    {
-            //        if (i < tokens.Count - 1)
-            //        {
-            //            if (LexemUtils.IsConstant(tokens[i + 1]))
-            //            {
-            //                tokens[i + 1].Type = LexemType.Error;
-            //                tokens[i + 1].Name = "Неочікуваний символ ' '";
-            //                i++;
-            //            }
-            //        }
-            //        tokens.Remove(lexem);
-            //    }
-            //}
             return results;
         }
     }
